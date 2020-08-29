@@ -9,8 +9,8 @@ router = routers.SimpleRouter(trailing_slash=False)
 # from django.conf.urls import url, include
 from task_manage.modelviewset import TaskViewSet, ProjectViewSet
 
-router.register(r'^task/', TaskViewSet, basename='create-task')
-router.register(r'^project/', ProjectViewSet, basename='create-project')
+router.register(r'^task', TaskViewSet, basename='create-task')
+router.register(r'^project', ProjectViewSet, basename='create-project')
 
 urlpatterns = [
 ]
