@@ -22,8 +22,13 @@ def auth_payload(user, token):
     data = {
         'token': token,
         'id': user.id,
-        'email': user.email,
         'username': user.username,
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'mobile_number': user.mobile_number
+        # 'last_login': user.last_login
+
 
         # 'detail': user.detail,
     }
