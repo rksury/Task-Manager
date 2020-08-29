@@ -13,7 +13,7 @@ def login(data):
         user = ser.object.get('user')
         token = ser.object.get('token')
         data = auth_payload(user, token)
-        return Response(data, status=status.HTTP_202_ACCEPTED)
+        return Response(data, status=status.HTTP_200_OK)
     else:
         return Response(ser.errors, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -21,10 +21,11 @@ def login(data):
 def auth_payload(user, token):
     data = {
         'token': token,
-        'username': user.username,
-        'email': user.email,
         'id': user.id,
-        'detail': user.detail,
+        'email': user.email,
+        'username': user.username,
+
+        # 'detail': user.detail,
     }
     return data
 
@@ -50,7 +51,7 @@ def update_user(user, user_id, data):
         serializer = UserPutSerializer(user_update, data=data, context={'user': user})
         if serializer.is_valid():
             user_updated = serializer.save()
-            get_serializer = UserGetSerializer(user_updated, many=False)
+            get_serializer = UserGetSerializer(user_updated,)
             return Response(get_serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -72,7 +73,7 @@ def get_user(user_id):
     if user_id:
         try:
             target_user = User.objects.get(id=user_id)
-            serializer = UserGetSerializer(target_user, many=False)
+            serializer = UserGetSerializer(target_user)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'user_not_exists'}, status=status.HTTP_404_NOT_FOUND)

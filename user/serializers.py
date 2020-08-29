@@ -69,17 +69,16 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     username = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     mobile_number = serializers.CharField(required=True, validators=[UniqueValidator(queryset=User.objects.all())])
     password = serializers.CharField(required=True, max_length=32)
-    confirm_password = serializers.CharField(required=True)
 
     class Meta:
         model = User
         fields = '__all__'
 
-    def validate(self, attrs):
-        if attrs['password'] != attrs['confirm_password']:
-            raise serializers.ValidationError('password and confirm password is not matched.')
-        attrs.pop('confirm_password')
-        return attrs
+    # def validate(self, attrs):
+        # if attrs['password'] != attrs['confirm_password']:
+            # raise serializers.ValidationError('password and confirm password is not matched.')
+        # attrs.pop('confirm_password')
+        # return attrs
 
     def validate_password(self, value):
         if value:
