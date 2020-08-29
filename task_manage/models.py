@@ -17,4 +17,3 @@ class TaskEntry(models.Model):
     type = models.CharField(max_length=255, choices=LEVEL_CHOICES, default=3)
 
     status = models.BooleanField(default=False)
-
