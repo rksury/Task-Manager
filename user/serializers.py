@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_jwt.serializers import JSONWebTokenSerializer
 from rest_framework_jwt.settings import api_settings
 
-from user.models import User, Detail
+from user.models import User
 
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
@@ -26,7 +26,6 @@ class CustomJWTSerializer(JSONWebTokenSerializer):
                 'username': user_obj.username,
                 'password': password
 
-                # self.password_field: attrs.get(self.password_field),
             }
             if all(credentials.values()):
                 user = authenticate(username=user_obj.username, password=password)
@@ -57,13 +56,13 @@ class CustomJWTSerializer(JSONWebTokenSerializer):
 class UserPutSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'address', 'email']
+        fields = ['id', 'username', 'email']
 
 
 class UserGetSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'address']
+        fields = ['id', 'username', 'email']
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
@@ -102,18 +101,3 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         super().save()
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Detail
-        fields = ['id', 'user', 'address']
-
-
-class UserDetailGetSerializer(serializers.ModelSerializer):
-    user = UserGetSerializer()
-
-    class Meta:
-        model = Detail
-        fields = ['id', 'user', 'address']

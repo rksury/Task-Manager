@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.urls import path
-from user.views import UserView, RegisterView, LoginView, DetailView
+from user.views import UserView, RegisterView, LoginView
 
 
 urlpatterns = [
@@ -23,6 +23,4 @@ urlpatterns = [
     path('<int:user_id>', UserView.as_view()),
     path('register/', RegisterView.as_view()),
     path('login/', LoginView.as_view()),
-    path('Detail', DetailView.as_view()),
-    path('Detail<int:user_id>', DetailView.as_view()),
 ]

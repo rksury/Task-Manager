@@ -2,10 +2,9 @@ from rest_framework.response import Response
 
 from rest_framework import status
 
-from .serializers import UserPutSerializer, CustomJWTSerializer, UserGetSerializer, UserRegisterSerializer, \
-    UserDetailSerializer, UserDetailGetSerializer
+from .serializers import UserPutSerializer, CustomJWTSerializer, UserGetSerializer, UserRegisterSerializer
 
-from user.models import User, Detail
+from user.models import User
 
 
 def login(data):
@@ -82,42 +81,3 @@ def get_user(user_id):
         serializer = UserGetSerializer(target_user, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-def add_details(user, data):
-    serializer = UserDetailSerializer(data=data, context={'user': user})
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-def get_detail(user, user_id):
-    if user_id:
-        try:
-            target_user = Detail.objects.filter(user_id=user_id)
-            serializer = UserDetailSerializer(target_user, many=False)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response({'error': 'user_not_exists'}, status=status.HTTP_404_NOT_FOUND)
-    else:
-        target_user = Detail.objects.all()
-        serializer = UserDetailGetSerializer(target_user, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-def update_user_details(user, user_id, data):
-
-    if user.is_superuser is False:
-        user_id = user.id
-    try:
-        user_update = Detail.objects.filter(user_id=user_id)
-        serializer = UserDetailSerializer(user_update, data=data, context={'user': user})
-        if serializer.is_valid():
-            serializer.save()
-            get_serializer = UserGetSerializer(serializer, many=False)
-            return Response(get_serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except User.DoesNotExist:
-        return Response({'error': 'user_not_exists'}, status=status.HTTP_404_NOT_FOUND)

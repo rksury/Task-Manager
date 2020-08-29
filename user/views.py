@@ -1,7 +1,7 @@
 from rest_framework.decorators import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .services import register_user, login, get_user, update_user, delete_user, add_details, get_detail, update_user_details
+from .services import register_user, login, get_user, update_user, delete_user
 
 
 class LoginView(APIView):
@@ -34,16 +34,3 @@ class UserView(APIView):
         if not user_id:
             user_id = request.user.pk
         return delete_user(user_id)
-
-
-class DetailView(APIView):
-    permission_classes = (IsAuthenticated,)
-
-    def post(self, request, format=None):
-        return add_details(request.user, request.data)
-
-    def put(self, request, user_id):
-        return update_user_details(request.user, user_id, request.data)
-
-    def get(self, request, user_id=None):
-        return get_detail(request.user, user_id)
